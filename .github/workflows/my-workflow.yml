@@ -1,4 +1,9 @@
+name: Keep Mega Alive
+
 on:
+  workflow_dispatch: # Putting here is also fine!!
+    release:
+      types: [created] 
   schedule:
     - cron: '0 0 * * 0' # Run every Sunday at midnight
 
@@ -10,11 +15,36 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget
+      
+    - name: Install megacmd
+      run: |
+        OS_NAME=$(lsb_release -c -s)
+        OS_VERSION=$(lsb_release -r -s)
+        wget https://mega.nz/linux/repo/x${OS_NAME}_${OS_VERSION}/amd64/megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
+        sudo dpkg -i megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
+        rm megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
+    
+    - name: Verify megacmd installation
+      run: |
+        if ! [ -x "$(command -v mega-version)" ]; then
+          echo "MEGAcmd installation failed."
+          exit 1
+        fi
+        echo "MEGAcmd installed successfully."
+    
     - name: Create CSV file
       run: echo "$MEGA_PASSWORDS_CSV" > temp.csv
+      
     - name: Run script
       run: |
         chmod u+x keep-mega-alive.sh
         ./keep-mega-alive.sh temp.csv
+    
     - name: Cleanup
       run: rm temp.csv
+          
