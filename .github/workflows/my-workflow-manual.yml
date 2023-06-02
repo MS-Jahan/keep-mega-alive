@@ -1,7 +1,7 @@
 on:
-  workflow_run:
-    workflows: ["Build"]
-    types: [requested]
+  workflow_dispatch: # Putting here is also fine!!
+  release:
+    types: [created]
 
 jobs:
   my_job:
