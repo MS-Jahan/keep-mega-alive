@@ -1,0 +1,21 @@
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [requested]
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    env:
+      MEGA_PASSWORDS_CSV: ${{ secrets.MEGA_PASSWORDS_CSV }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create CSV file
+      run: echo "$MEGA_PASSWORDS_CSV" > temp.csv
+    - name: Run script
+      run: |
+        chmod u+x keep-mega-alive.sh
+        ./keep-mega-alive.sh temp.csv
+    - name: Cleanup
+      run: rm temp.csv
