@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       MEGA_PASSWORDS_CSV: ${{ secrets.MEGA_PASSWORDS_CSV }}
+      STAT_PING_URL: ${{ secrets.PING_URL }} 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -45,4 +46,7 @@ jobs:
     
     - name: Cleanup
       run: rm temp.csv
+      
+    - name: Ping Healthchecks
+      run: curl $STAT_PING_URL
           
