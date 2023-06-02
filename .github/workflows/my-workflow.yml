@@ -23,11 +23,9 @@ jobs:
       
     - name: Install megacmd
       run: |
-        OS_NAME=$(lsb_release -c -s)
-        OS_VERSION=$(lsb_release -r -s)
-        wget https://mega.nz/linux/repo/x${OS_NAME}_${OS_VERSION}/amd64/megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
-        sudo dpkg -i megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
-        rm megacmd-x${OS_NAME}_${OS_VERSION}_amd64.deb
+        wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb
+        sudo dpkg -i megacmd-xUbuntu_22.04_amd64.deb
+        rm megacmd-xUbuntu_22.04_amd64.deb
     
     - name: Verify megacmd installation
       run: |
